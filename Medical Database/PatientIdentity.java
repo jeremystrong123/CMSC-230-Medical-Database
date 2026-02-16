@@ -41,7 +41,8 @@ public class PatientIdentity {
      * 
      * @param other patient to compare to.
      * 
-     * @return true if the identity is less than and false if not
+     * @return true if the identity is less than and false if not, 
+     * (less than means earlier name in alphabet or later birth).
      */
     public boolean isLessThan(PatientIdentity other){
         if (name.isLessThan(other.getName())) {
@@ -67,7 +68,7 @@ public class PatientIdentity {
     Name getName() {
         return name;
     }
-    
+
     /**
      * Accessor method for the date of birth.
      * @return returns the date object associated with the patient.
@@ -81,7 +82,7 @@ public class PatientIdentity {
      * @return 'name: ' follow by the patients name, then 'dob: ' followed by the patient's date of birth
      */
     public String toString() {
-        return "name: " + name.toString() + " dob: " + dateOfBirth.toString();
+        return name.toString() + " dob: " + dateOfBirth.toString();
     }
 
 }

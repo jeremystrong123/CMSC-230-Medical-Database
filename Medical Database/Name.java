@@ -35,10 +35,10 @@ public class Name {
 
     /**
      * Accessor method for the full name of the patient.
-     * @return returns the last then first name of the patient as a combined string.
+     * @return returns the last then first name of the patient as a string, with a space in between.
      */
     public String getFullName() {
-        return lastName + firstName;
+        return lastName + " " + firstName;
     }
 
     /**
