@@ -1,3 +1,9 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
+
 public class PatientList {
     //instance variables
     private Patient[] patientArray;
@@ -119,5 +125,67 @@ public class PatientList {
      */
     public int getIndexOfIteration() {
         return indexOfIteration;
+    }
+
+    /**
+     * Saves a list of patients from a PatientList into a CSV file format.
+     * 
+     * @param filename file path for the CSV file that the strings will be written into.
+     * 
+     * @return true if successful, false if not.
+     */
+    public boolean saveToFile(String filename) {
+        boolean result = true;
+        File patientsFile = new File(filename);
+        FileWriter writer;
+        try {
+            writer = new FileWriter(patientsFile);
+            this.initIteration();
+            while (indexOfIteration != -1) {
+                String csvLine = this.next().toCSV();
+                writer.write(csvLine + System.lineSeparator());
+            }
+            writer.close();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            result = false;
+        }
+        return result;
+    }
+
+    /**
+     * Takes a CSV file with patients and creates a PatientList.
+     * 
+     * @param filename file path of the CSV file that will be loaded into the system as a PatientList.
+     * 
+     * @return true if successful, false if failed.
+     */
+    public boolean importFromFile(String filename) {
+        boolean result = true;
+        File patientsFile = new File(filename);
+        Scanner scan;
+        try {
+            scan = new Scanner(patientsFile);
+            while (scan.hasNextLine()) {
+                String current = scan.nextLine();
+                Patient p = Patient.createPatientFromCSV(current);
+                addPatient(p);
+            }
+            scan.close();
+        }
+        catch(FileNotFoundException e) {
+            e.printStackTrace();
+            result = false;
+        }
+        return result;
+    }
+
+    /**
+     * Get method for the nextAvailableIndex.
+     * @return returns the nextAvailableIndex's integer value.
+     */
+    public int getNextAvailableIndex() {
+        return nextAvailableIndex;
     }
 }

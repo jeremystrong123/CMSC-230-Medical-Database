@@ -121,4 +121,59 @@ public class PatientListTest {
         assertEquals(pt3, pl.next());
         assertEquals(-1, pl.getIndexOfIteration());
     }
+
+    @Test
+    void importFromFileTest() {
+        PatientList pl2 = new PatientList();
+        pl2.importFromFile("data/patients1000.csv");
+        assertEquals(1000, pl2.getNextAvailableIndex());
+        Name nm1 = new Name("Walter", "Gomez");
+        Date dob1 = new Date(106, 3, 5);
+        PatientIdentity id1 = new PatientIdentity(nm1, dob1);
+        Patient pt1 = new Patient(id1);
+        Name nm2 = new Name("Kathleen", "Smith");
+        Date dob2 = new Date(27, 7, 6);
+        PatientIdentity id2 = new PatientIdentity(nm2, dob2);
+        Patient pt2 = new Patient(id2);
+        Name nm3 = new Name("Barbara", "Alvarez");
+        Date dob3 = new Date(86, 7, 29);
+        PatientIdentity id3 = new PatientIdentity(nm3, dob3);
+        Patient pt3 = new Patient(id3);
+        assertEquals(pt1.toString(), pl2.findPatient(id1).toString());
+        assertEquals(pt2.toString(), pl2.findPatient(id2).toString());
+        assertEquals(pt3.toString(), pl2.findPatient(id3).toString());
+    }
+
+    @Test
+    void importFromFileFailsWithoutFile() {
+        assertEquals(false, pl.importFromFile("ahsjukvdbkjahwebfr"));
+    }
+
+    @Test
+    void saveToFileTest() {
+        PatientList pl2 = new PatientList();
+        Patient pt1 = Patient.createPatientFromCSV("Smith,John,1990-04-17");
+        Patient pt2 = Patient.createPatientFromCSV("Smith,Robert,1991-07-21");
+        Patient pt3 = Patient.createPatientFromCSV("Smith,Jones,1985-01-30");
+        Patient pt4 = Patient.createPatientFromCSV("Smith,Noah,1972-08-3");
+        Patient pt5 = Patient.createPatientFromCSV("Smith,Henry,2003-11-7");
+        pl2.addPatient(pt1);
+        pl2.addPatient(pt2);
+        pl2.addPatient(pt3);
+        pl2.addPatient(pt4);
+        pl2.addPatient(pt5);
+        pl2.saveToFile("data/writertest.csv");
+        PatientList pl3 = new PatientList();
+        pl3.importFromFile("data/writertest.csv");
+        assertEquals(pt1.toString(), pl3.findPatient(pt1.getIdentity()).toString());
+        assertEquals(pt2.toString(), pl3.findPatient(pt2.getIdentity()).toString());
+        assertEquals(pt3.toString(), pl3.findPatient(pt3.getIdentity()).toString());
+        assertEquals(pt4.toString(), pl3.findPatient(pt4.getIdentity()).toString());
+        assertEquals(pt5.toString(), pl3.findPatient(pt5.getIdentity()).toString());
+    }
+
+    @Test
+    void saveToFileFailsWithImproperFile() {
+        assertEquals(false, pl.saveToFile("file/file.file"));
+    }
 }
