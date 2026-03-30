@@ -2,7 +2,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Scanner;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 public class PatientList {
     //instance variables
@@ -171,6 +174,41 @@ public class PatientList {
                 String current = scan.nextLine();
                 Patient p = Patient.createPatientFromCSV(current);
                 addPatient(p);
+            }
+            scan.close();
+        }
+        catch(FileNotFoundException e) {
+            e.printStackTrace();
+            result = false;
+        }
+        return result;
+    }
+
+    /**
+     * Takes a CSV file with prescription information and adds those prescriptions to their patient's PrescriptionList.
+     * 
+     * @param filename file path of the CSV file that will load in all of the prescription information.
+     * 
+     * @return true if successful, false if failed.
+     */
+    public boolean importPrescriptionList(String filename) {
+        boolean result = true;
+        File prescriptionsFile = new File(filename);
+        Scanner scan;
+        try {
+            scan = new Scanner(prescriptionsFile);
+            while (scan.hasNextLine()) {
+                String current = scan.nextLine();
+                String tokens[] = current.split(",");
+                try {
+                    Name name = new Name(tokens[1], tokens[0]);;
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                    Date dob = formatter.parse(tokens[2]);
+                    PatientIdentity id = new PatientIdentity(name, dob);
+                    Patient pt = this.findPatient(id);
+                    Prescription pr = Prescription.createPrescriptionFromCSV(current);
+                    pt.getPrescriptionList().add(pr);
+                } catch(java.text.ParseException ex) {}
             }
             scan.close();
         }

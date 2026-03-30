@@ -4,6 +4,7 @@ import java.util.Date;
 public class Patient {
     //instance variables
     private PatientIdentity identity;
+    private PrescriptionList prescriptionList;
 
     //constructors
     /**
@@ -13,6 +14,7 @@ public class Patient {
      */
     public Patient(PatientIdentity id){
         identity = id;
+        prescriptionList = new PrescriptionList();
     }
 
     //methods
@@ -22,6 +24,14 @@ public class Patient {
      */
     public PatientIdentity getIdentity(){
         return identity;
+    }
+
+    /**
+     * Accessor for prescriptionList.
+     * @return the PrescriptionList associated with the patient.
+     */
+    public PrescriptionList getPrescriptionList() {
+        return prescriptionList;
     }
 
     /**
