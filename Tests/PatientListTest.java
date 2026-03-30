@@ -176,4 +176,25 @@ public class PatientListTest {
     void saveToFileFailsWithImproperFile() {
         assertEquals(false, pl.saveToFile("file/file.file"));
     }
+
+    @Test
+    void importPrescriptionListTest() {
+        PatientList pl2 = new PatientList();
+        Patient pt1 = Patient.createPatientFromCSV("Lee,Barbara,1961-11-26");
+        pl2.addPatient(pt1);
+        Patient pt2 = Patient.createPatientFromCSV("Gomez,Tomas,1942-04-13");
+        pl2.addPatient(pt2);
+        Patient pt3 = Patient.createPatientFromCSV("Carpenter,Barbara,2014-11-05");
+        pl2.addPatient(pt3);
+        pl2.importPrescriptionList("/data/new_prescriptions.csv");
+        pl2.initIteration();
+        assertEquals(pt3, pl2.next());
+        assertEquals(pt2, pl2.next());
+        assertEquals(pt1, pl2.next());
+    }
+
+    @Test
+    void importPrescriptionListFailsWithoutFile() {
+        assertEquals(false, pl.importFromFile("ahsjukvdbkjahwebfr"));
+    }
 }
